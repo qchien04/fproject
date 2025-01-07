@@ -25,6 +25,13 @@ public class UserDetailsCustom implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         com.example.fproject.entity.forUser.User user=this.userService.findByUsername(username);
+        if(user==null){
+            user=this.userService.findByEmail(username);
+            if (user==null){
+                throw new RuntimeException("User not found : "+username);
+            }
+        }
+
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (Role role : user.getRoles()) {
             for (Permission permission: role.getPermissions() ){

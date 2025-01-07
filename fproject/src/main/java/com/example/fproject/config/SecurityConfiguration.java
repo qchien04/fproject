@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                         authz -> authz
                                 .requestMatchers("/api/**").authenticated()
                                 .anyRequest().permitAll())
-                                //.anyRequest().permitAll())
+                //.oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -62,9 +62,8 @@ public class SecurityConfiguration {
 
                 .formLogin(withDefaults())
                 .csrf(csrf -> csrf.disable())
-                .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class);
 
-        /*.oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))*/;
         return http.build();
     }
 

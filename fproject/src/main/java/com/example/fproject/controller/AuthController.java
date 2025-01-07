@@ -100,7 +100,7 @@ public class AuthController {
 
         createdUser.setPassword(passwordEncoder.encode(password));
         userService.save(createdUser);
-        Authentication authentication=new UsernamePasswordAuthenticationToken(username,password);
+        Authentication authentication=new UsernamePasswordAuthenticationToken(email,password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt=tokenProvider.genarateToken(authentication);
         AuthRespone res=new AuthRespone(jwt,true);
@@ -131,5 +131,6 @@ public class AuthController {
         }
         return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
     }
+
 
 }

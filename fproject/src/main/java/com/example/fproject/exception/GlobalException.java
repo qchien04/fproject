@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalException {
     @ExceptionHandler(UserException.class)
+    @ResponseBody
     public ResponseEntity<ErrorDetail> UserExceptionHandler(UserException e, WebRequest req){
         ErrorDetail errorDetail=new ErrorDetail(e.getMessage(),req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetail>(errorDetail, HttpStatus.BAD_REQUEST);
@@ -33,8 +35,6 @@ public class GlobalException {
         ErrorDetail errorDetail=new ErrorDetail("Enpoint not found",req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetail>(errorDetail, HttpStatus.BAD_REQUEST);
     }
-
-
 
 
     @ExceptionHandler(Exception.class)

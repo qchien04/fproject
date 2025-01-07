@@ -1,7 +1,12 @@
 package com.example.fproject.exception;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 public class ErrorDetail {
     private String error;
     private String message;
@@ -14,5 +19,14 @@ public class ErrorDetail {
         this.error = error;
         this.message = message;
         this.timeStamp = timeStamp;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorDetail{" +
+                "error='" + error + '\'' +
+                ", message='" + message + '\'' +
+                ", timeStamp=" + timeStamp +
+                '}';
     }
 }

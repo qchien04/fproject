@@ -18,12 +18,7 @@ public class OTPCodeServiceImp implements OTPCodeService {
 
     @Override
     public OTPCode findOTPCode(String mail, String data) {
-        System.out.println(mail);
-        System.out.println(data);
         Optional<OTPCode> otpCode =otpCodeRepo.findByMailAndData(mail, data);
-
-        System.out.println("vai nhan long");
-        System.out.println(otpCode);
 
         if (otpCode.isPresent()) {
             return otpCode.get();

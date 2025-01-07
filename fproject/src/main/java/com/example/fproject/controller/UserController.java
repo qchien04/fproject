@@ -39,7 +39,6 @@ public class UserController {
     public ResponseEntity<List<User>> searchUserHandler(@PathVariable("query") String query) throws UserException {
         System.out.println("query: "+query);
         List<User> users=userService.searchUser(query);
-        System.out.println("DOON");
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 

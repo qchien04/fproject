@@ -72,12 +72,7 @@ public class UserServiceImp implements UserService {
 
     public User findByUsername(String username) {
         Optional<User> result= userRepo.findByUsername(username);
-        if(result.isPresent()){
-            return result.get();
-        }
-        else{
-            throw new RuntimeException("User not found : "+username);
-        }
+        return result.orElse(null);
     }
 
     @Override

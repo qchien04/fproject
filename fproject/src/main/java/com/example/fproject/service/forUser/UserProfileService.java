@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public interface UserProfileService {
+    public UserProfile save(UserProfile userProfile);
     public UserProfile findById(int id);
     public void deleteById(int id);
     public UserProfile findByUsername(String username);
