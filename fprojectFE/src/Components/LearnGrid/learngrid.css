@@ -1,0 +1,13 @@
+.box{
+    background-color: orange;
+    height: 100px;
+    width: 100%;
+}
+
+.slider-item{
+    background: #8cc2ef;
+    padding: 50px 20px;
+    text-align: center;
+    font-size: 50px;
+    overflow: scroll;
+}

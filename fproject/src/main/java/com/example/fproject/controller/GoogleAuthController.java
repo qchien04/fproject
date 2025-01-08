@@ -46,6 +46,7 @@ public class GoogleAuthController{
         try {
             Map<String, Object> tokenInfo = restTemplate.getForObject(tokenInfoUrl, Map.class);
             System.out.println(tokenInfo);
+            System.out.println("Bat dau kiem tra token");
             if (tokenInfo != null && tokenInfo.containsKey("email")) {
                 // Xử lý thông tin người dùng
                 String email = (String) tokenInfo.get("email");
@@ -56,7 +57,7 @@ public class GoogleAuthController{
 
                 User find_user =userService.findByEmail(email);
 
-                System.out.println(find_user);
+                //System.out.println(find_user);
                 if(find_user==null){
                     System.out.println("bang null la ro");
                     User user=new User(email,email,"123");
