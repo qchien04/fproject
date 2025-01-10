@@ -40,7 +40,7 @@ public class GoogleAuthController{
         String accessToken = request.get("accessToken");
         System.out.println("Call"+accessToken);
         // Gọi Google API để xác thực Access Token
-        String tokenInfoUrl = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=" + accessToken;
+        String tokenInfoUrl = "https://www.googleapis.com/oauth2/v3/userinfo?" + accessToken.substring(1);
 
         RestTemplate restTemplate = new RestTemplate();
         try {

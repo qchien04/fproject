@@ -1,20 +1,28 @@
 import { Layout } from "antd";
 // import LearnGrid from "../../Components/LearnGrid";
 import "./layoutdefault.css";
-import logo_short from "../../images/logo_short.png";
-import logo_long from "../../images/logo_long.png";
-import {SearchOutlined, MenuUnfoldOutlined} from "@ant-design/icons"
-import { useState } from "react";
+import logo_short from "../../assets/images/logo_short.png";
+import logo_long from "../../assets/images/logo_long.png";
+import {SearchOutlined, MenuUnfoldOutlined, LogoutOutlined} from "@ant-design/icons"
+import { MouseEventHandler, useState } from "react";
 import Notify from "../../Components/Notify";
 import MenuSider from "../../Components/MenuSider";
 import { Outlet } from "react-router-dom";
+import { useAuth } from "../../modules/auth/hooks/useAuth";
+import { signOut } from "../../modules/auth/context/AuthReducer";
 
 const {Sider,Content}=Layout;
 
 function LayoutDefault(){
     const [collapsed,setCollapsed]=useState(false);
-
-    
+    const {dispatch} =useAuth();
+    const handleLogout:MouseEventHandler<HTMLDivElement>=()=>{
+        const userConfirmed = confirm("Are you sure you want to logout?");
+        if (userConfirmed) {
+            localStorage.removeItem('jwtToken');
+            dispatch(signOut());
+        } 
+    }
     return(
         <>
             <Layout className="layout-default">
@@ -36,6 +44,7 @@ function LayoutDefault(){
                         </div>
 
                         <div className="header__nav-right">
+                            <LogoutOutlined onClick={handleLogout}></LogoutOutlined>
                             <Notify/>
                         </div>
 

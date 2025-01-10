@@ -1,5 +1,5 @@
 import { Carousel, QRCode } from "antd";
-import logo from "../../images/logo_short.png";
+import logo from "../../assets/images/logo_short.png";
 
 function Slide(){
     return(

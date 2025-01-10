@@ -1,13 +1,16 @@
 import './App.css';
-import AllRoute from './Components/AllRoute';
+import Router from './routes/router';
 
 function App() {
   return(
     <>
-      <AllRoute></AllRoute>
+      <Router></Router>
     </>
   );
 
 }
 
+
 export default App;
+
+

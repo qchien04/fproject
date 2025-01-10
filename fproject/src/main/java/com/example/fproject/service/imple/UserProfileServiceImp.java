@@ -3,12 +3,14 @@ package com.example.fproject.service.imple;
 
 import com.example.fproject.entity.forUser.User;
 import com.example.fproject.entity.forUser.UserProfile;
+import com.example.fproject.exception.UserException;
 import com.example.fproject.repository.UserProfileRepo;
 import com.example.fproject.security.TokenProvider;
 import com.example.fproject.service.forUser.UserProfileService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class UserProfileServiceImp implements UserProfileService {
@@ -45,6 +47,15 @@ public class UserProfileServiceImp implements UserProfileService {
         return null;
     }
 
+    @Override
+    public UserProfile findByUserId(int userId) throws UserException {
+        Optional<UserProfile> userProfile= userProfileRepo.findByUserId(userId);
+        System.out.println("userid"+" "+userId);
+        if(userProfile==null){
+            throw new UserException("User profile not found");
+        }
+        return userProfile.get();
+    }
 
     @Override
     public List<UserProfile> searchUser(String query) {

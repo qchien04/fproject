@@ -94,7 +94,7 @@ const MenuSider: React.FC = () => {
     },
     {
       key: '7',
-      label: <Link to='/rooms' style={{ fontSize: '10px' }}>List Room</Link>,
+      label: <Link to='/account/my-store/list-product' style={{ fontSize: '10px' }}>List Room</Link>,
       icon: <SettingOutlined />,
     },
   ];

@@ -10,7 +10,7 @@ export const get =async(path:string)=>{
 
 
 
-export const post=async(path:string,option)=>{
+export const post=async(path:string,option:unknown)=>{
     const response=await fetch(API_DOMAIN+path,{
         method:"POST",
         headers:{
@@ -31,7 +31,7 @@ export const del=async(path:string,id:string)=>{
     return result;
 }
 
-export const patch=async(path:string,option)=>{
+export const patch=async(path:string,option:unknown)=>{
     const response=await fetch(API_DOMAIN+path,{
         method:"PATCH",
         headers:{

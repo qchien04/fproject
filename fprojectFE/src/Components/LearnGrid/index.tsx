@@ -1,7 +1,7 @@
 import { Carousel, Col, Collapse, Image, Rate, Row, Tabs, QRCode } from "antd";
 import "./learngrid.css";
 import Slide from "./Slide";
-import logo from "../../images/logo_short.png";
+import logo from "../../assets/images/logo_short.png";
 
 /* Ghi chú cho Row và Col:
    - gutter: khoảng cách giữa các cột
