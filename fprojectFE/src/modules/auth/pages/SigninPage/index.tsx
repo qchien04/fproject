@@ -5,22 +5,12 @@ import { Form, Input } from "antd";
 import GoogleLogin from "./GoogleLogin";
 
 import "./Signin.css";
-import authService from "../../services/authService";
+import authService, { LoginForm } from "../../services/authService";
 import { useAuth } from "../../hooks/useAuth";
 import { signIn } from "../../context/AuthReducer";
 import { useNavigate } from "react-router-dom";
+import { User } from "../../context/types";
 
-interface Logindata {
-  username: string;
-  password: string;
-}
-interface User{
-  email:string;
-  roles:string[];
-  permissions:string[];
-  name:string;
-  avt?:string;
-}
 const Signin: React.FC = () => {
  // const [notifyApi, contextHolder] = notification.useNotification();
   // const [spinning, setSpinning] = useState<boolean>(false);
@@ -42,10 +32,12 @@ const Signin: React.FC = () => {
       message: "Not accept !",
     },
   ];
-  const handleSubmit = async (values: Logindata) => {
+  const handleSubmit = async (values: LoginForm) => {
     try{
+      localStorage.removeItem("jwtToken");
       const response = await authService.signin(values);
       console.log(response);
+
       localStorage.setItem("jwtToken",response.jwt);
 
       const user:User=await authService.getbasicInfo();

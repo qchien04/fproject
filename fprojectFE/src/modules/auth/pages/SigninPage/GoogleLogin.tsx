@@ -33,7 +33,7 @@ const GoogleLogin:React.FC=() => {
       }
     }
     check();
-  }, []);
+  }, [dispatch]);
 
   const handleLogin = () => {
     const clientId = '82696225190-hdskhqludierkcsj1r4h9cif8kb6lq2t.apps.googleusercontent.com'; // Thay bằng client ID của bạn

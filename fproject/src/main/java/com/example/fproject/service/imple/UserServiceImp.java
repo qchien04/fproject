@@ -63,7 +63,7 @@ public class UserServiceImp implements UserService {
         if(email==null){
             throw new BadCredentialsException("Invalid token");
         }
-        User user=findByUsername(email);
+        User user=findByEmail(email);
         if (user==null){
             throw new UserException("User not found with email "+email);
         }

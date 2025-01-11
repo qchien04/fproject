@@ -1,27 +1,27 @@
 package com.example.fproject.response;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthRespone {
     private String jwt;
+
+    @JsonProperty("isAuth")
     private boolean isAuth;
 
-    public AuthRespone(String jwt,boolean isAuth) {
-        this.isAuth = isAuth;
-        this.jwt = jwt;
-    }
-
-    public String getJwt() {
-        return jwt;
-    }
-
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
-    }
-
-    public boolean isAuth() {
-        return isAuth;
-    }
-
-    public void setAuth(boolean auth) {
-        isAuth = auth;
+    @Override
+    public String toString() {
+        return "AuthRespone{" +
+                "jwt='" + jwt + '\'' +
+                ", isAuth=" + isAuth +
+                '}';
     }
 }

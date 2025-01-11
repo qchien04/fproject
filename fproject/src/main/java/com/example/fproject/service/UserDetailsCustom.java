@@ -39,7 +39,7 @@ public class UserDetailsCustom implements UserDetailsService {
             }
         }
         return new User(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 authorities);
     }

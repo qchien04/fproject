@@ -3,6 +3,7 @@ package com.example.fproject.controller;
 
 import com.example.fproject.entity.OTPCode;
 import com.example.fproject.entity.forUser.User;
+import com.example.fproject.entity.forUser.UserProfile;
 import com.example.fproject.exception.UserException;
 import com.example.fproject.request.AuthAccount;
 import com.example.fproject.request.LoginRequest;
@@ -59,8 +60,11 @@ public class AuthController {
         String email=userRegister.getEmail();
         String password=userRegister.getPassword();
         User isUser=userService.findByEmail(email);
+
         if(isUser!=null){
-            throw new UserException("Email is used with other account "+email);
+            RegisterRespone res=new RegisterRespone();
+            res.setMessage("not accept");
+            return new ResponseEntity<RegisterRespone>(res, HttpStatus.OK);
         }
 
 
@@ -77,6 +81,7 @@ public class AuthController {
         res.setEmail(email);
         res.setUsername(username);
         res.setPassword(password);
+        res.setMessage("ok");
 
         return new ResponseEntity<RegisterRespone>(res, HttpStatus.OK);
     }
@@ -90,16 +95,23 @@ public class AuthController {
         OTPCode otp=otpCodeService.findOTPCode(email,authAccount.getOtp());
 
         if(otp==null){
-            throw new UserException("OTP invalid! "+email);
+            AuthRespone res=new AuthRespone("",false);
+            return new ResponseEntity<AuthRespone>(res, HttpStatus.OK);
         }
 
         User createdUser=new User();
         createdUser.setEmail(email);
         createdUser.setUsername(username);
+        createdUser.setPassword(passwordEncoder.encode(password));
 //        createdUser.setPassword(password);
 
-        createdUser.setPassword(passwordEncoder.encode(password));
-        userService.save(createdUser);
+
+        UserProfile userProfile=new UserProfile();
+        userProfile.setUser(createdUser);
+        userProfile.setAvt("https://ui.dev/post-images/response.png");
+        userProfile.setName("Vo danh");
+        userProfileService.save(userProfile);
+
         Authentication authentication=new UsernamePasswordAuthenticationToken(email,password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt=tokenProvider.genarateToken(authentication);

@@ -82,8 +82,10 @@ public class GoogleAuthController{
                     System.out.println("da co trong db");
                     Authentication authentication=authenticate(email);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println("nenen"+" "+authentication.getName()+" "+authentication.getAuthorities());
                     String jwt=tokenProvider.genarateToken(authentication);
                     AuthRespone res=new AuthRespone(jwt,true);
+                    System.out.println(res);
                     return new ResponseEntity<AuthRespone>(res, HttpStatus.OK);
                 }
 

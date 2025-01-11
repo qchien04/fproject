@@ -29,7 +29,7 @@ axiosClient.interceptors.request.use(
 // Interceptor cho response
 axiosClient.interceptors.response.use(
   (response) => {
-    return response.data; // Trả về dữ liệu gốc
+    return response; // Trả về dữ liệu gốc
   },
   (error) => {
     console.error(error.response || error.message);
