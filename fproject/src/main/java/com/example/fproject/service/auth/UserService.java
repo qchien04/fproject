@@ -1,6 +1,6 @@
-package com.example.fproject.service.forUser;
+package com.example.fproject.service.auth;
 
-import com.example.fproject.entity.forUser.User;
+import com.example.fproject.entity.auth.User;
 import com.example.fproject.exception.UserException;
 import org.springframework.stereotype.Service;
 

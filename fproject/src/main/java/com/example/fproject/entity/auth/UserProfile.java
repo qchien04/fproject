@@ -1,4 +1,4 @@
-package com.example.fproject.entity.forUser;
+package com.example.fproject.entity.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

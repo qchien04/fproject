@@ -1,12 +1,12 @@
-package com.example.fproject.controller;
+package com.example.fproject.controller.auth;
 
-import com.example.fproject.entity.forUser.User;
-import com.example.fproject.entity.forUser.UserProfile;
+import com.example.fproject.entity.auth.User;
+import com.example.fproject.entity.auth.UserProfile;
 import com.example.fproject.response.AuthRespone;
 import com.example.fproject.security.TokenProvider;
 import com.example.fproject.service.UserDetailsCustom;
-import com.example.fproject.service.forUser.UserProfileService;
-import com.example.fproject.service.forUser.UserService;
+import com.example.fproject.service.auth.UserProfileService;
+import com.example.fproject.service.auth.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.example.fproject.repository;
 
-import com.example.fproject.entity.forUser.UserProfile;
+import com.example.fproject.entity.auth.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

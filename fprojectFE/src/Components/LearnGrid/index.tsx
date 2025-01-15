@@ -70,7 +70,7 @@ function LearnGrid(): JSX.Element {
 
       <Image 
         width={200} 
-        src="https://via.placeholder.com/200" 
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrTiecQuLhs_w5OQTOFmPxTqaxRua2SY9stg&s" 
         alt="Placeholder Image" 
       />
 

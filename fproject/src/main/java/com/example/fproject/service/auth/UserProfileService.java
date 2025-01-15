@@ -1,12 +1,10 @@
-package com.example.fproject.service.forUser;
+package com.example.fproject.service.auth;
 
-import com.example.fproject.entity.forUser.UserProfile;
+import com.example.fproject.entity.auth.UserProfile;
 import com.example.fproject.exception.UserException;
-import jdk.jshell.spi.ExecutionControl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface UserProfileService {

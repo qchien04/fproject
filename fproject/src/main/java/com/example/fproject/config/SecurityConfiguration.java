@@ -45,11 +45,14 @@ public class SecurityConfiguration {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration corsConfig = new CorsConfiguration();
                         // Chỉ định nguồn gốc cụ thể
-                        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:5173"));
+                        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:5174",
+                                                                    "http://localhost:5173"));
                         // Chỉ định các phương thức HTTP cụ thể
                         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-                        // Bật xác thực (cookies, token)
+
+                        // Bật xác thực (cookies, token), không được để * trong setAllowedOrigins
                         corsConfig.setAllowCredentials(true);
+
                         // Chỉ định các headers cụ thể
                         corsConfig.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
                         // Các header được phơi bày cho client

@@ -7,6 +7,7 @@ import AuthGuard from '../modules/auth/components/AuthGuard';
 import RoleBasedGuard from '../modules/auth/components/RoleBasedGuard';
 import { ROLE } from '../config';
 import { Signup } from '../modules/auth/pages';
+import RoomChatListBar from '../modules/chat/components/RoomChatListBar';
 const Signin = lazy(() => import('../modules/auth/pages/SigninPage'));
 
 
@@ -42,6 +43,10 @@ const Router: FC = () => {
                 index: true,
                 path:'/account',
                 element: <DashBoard/>,
+              },
+              {
+                path: 'chat',
+                element: <RoomChatListBar />,
               },
               {
                 path: 'my-store',

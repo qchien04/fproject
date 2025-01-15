@@ -1,9 +1,9 @@
 package com.example.fproject.service;
 
 
-import com.example.fproject.entity.forUser.Permission;
-import com.example.fproject.entity.forUser.Role;
-import com.example.fproject.service.forUser.UserService;
+import com.example.fproject.entity.auth.Permission;
+import com.example.fproject.entity.auth.Role;
+import com.example.fproject.service.auth.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ public class UserDetailsCustom implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.example.fproject.entity.forUser.User user=this.userService.findByUsername(username);
+        com.example.fproject.entity.auth.User user=this.userService.findByUsername(username);
         if(user==null){
             user=this.userService.findByEmail(username);
             if (user==null){

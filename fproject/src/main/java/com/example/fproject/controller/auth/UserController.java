@@ -1,15 +1,15 @@
-package com.example.fproject.controller;
+package com.example.fproject.controller.auth;
 
 
 
-import com.example.fproject.entity.forUser.Permission;
-import com.example.fproject.entity.forUser.Role;
-import com.example.fproject.entity.forUser.User;
-import com.example.fproject.entity.forUser.UserProfile;
+import com.example.fproject.entity.auth.Permission;
+import com.example.fproject.entity.auth.Role;
+import com.example.fproject.entity.auth.User;
+import com.example.fproject.entity.auth.UserProfile;
 import com.example.fproject.exception.UserException;
 import com.example.fproject.response.AuthoritiesResponse;
-import com.example.fproject.service.forUser.UserProfileService;
-import com.example.fproject.service.forUser.UserService;
+import com.example.fproject.service.auth.UserProfileService;
+import com.example.fproject.service.auth.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,6 @@ public class UserController {
 
     @GetMapping("/basicInfo")
     public ResponseEntity<AuthoritiesResponse> getAuthoritiesHandler(@RequestHeader("Authorization") String token) throws UserException {
-        System.out.println("hoi basic info");
         User user=userService.findByJwt(token);
         UserProfile userProfile=userProfileService.findByUserId(user.getId());
         List<String> roles=new ArrayList<>();
@@ -54,10 +53,6 @@ public class UserController {
                 authorities.add(permission.getPermissionName());
             }
         }
-        System.out.println("goi role");
-        System.out.println(roles);
-        System.out.println("goi author");
-        System.out.println(authorities);
         AuthoritiesResponse authoritiesResponse=new AuthoritiesResponse(user.getEmail(), userProfile.getAvt(),userProfile.getName(),authorities,roles);
         return new ResponseEntity<AuthoritiesResponse>(authoritiesResponse, HttpStatus.OK);
     }

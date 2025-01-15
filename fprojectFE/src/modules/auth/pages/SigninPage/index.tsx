@@ -35,6 +35,7 @@ const Signin: React.FC = () => {
   const handleSubmit = async (values: LoginForm) => {
     try{
       localStorage.removeItem("jwtToken");
+      
       const response = await authService.signin(values);
       console.log(response);
 

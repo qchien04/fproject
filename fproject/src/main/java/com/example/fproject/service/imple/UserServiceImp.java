@@ -1,12 +1,12 @@
 package com.example.fproject.service.imple;
 
 
-import com.example.fproject.entity.forUser.User;
+import com.example.fproject.entity.auth.User;
 import com.example.fproject.exception.UserException;
 import com.example.fproject.repository.UserRepo;
 import com.example.fproject.response.PageResponse;
 import com.example.fproject.security.TokenProvider;
-import com.example.fproject.service.forUser.UserService;
+import com.example.fproject.service.auth.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined,AliwangwangFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { MenuProps } from "antd/es/menu";
 
@@ -21,7 +21,7 @@ const MenuSider: React.FC = () => {
   const items: CombineType[] = [
     {
       key: '1',
-      label: <Link to='/' style={{ fontSize: '10px' }}>Home</Link>,
+      label: <Link to='/account' style={{ fontSize: '10px' }}>Home</Link>,
       disabled: true,
     },
     {
@@ -96,6 +96,11 @@ const MenuSider: React.FC = () => {
       key: '7',
       label: <Link to='/account/my-store/list-product' style={{ fontSize: '10px' }}>List Room</Link>,
       icon: <SettingOutlined />,
+    },
+    {
+      key: '8',
+      label: <Link to='/account/chat' style={{ fontSize: '10px' }}>Chat</Link>,
+      icon: <AliwangwangFilled />,
     },
   ];
 
