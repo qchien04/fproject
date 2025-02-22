@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: jobhunter
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/jobhunter
+    username: root
+    password: Taolahai1762004@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: localhost:29092
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: fifahayrataolahai17620044@gmail.com
+    password: ayur hxdz owrf bvvw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+openapi:
+  service:
+    api-docs: api-service
+    server: http://localhost:8080
+    title: API Document
+    version: 1.0.0
+
+endpoint:
+  confirmUser: http://localhost:8080/user/confirm
+
+docker:
+  compose:
+    enabled: false
+
+hoidanit:
+  jwt:
+    base64-secret: TRrx3ZoD9xgevlM73MU8/ay9VO+8RJ7NjvFh5Ab0xoTsKzuPYwCOKDZugGYsVxroYRfP94DH6jBxBhFyBPaQQQ==
+    access-token-validity-in-seconds: 8640000
+    refresh-token-validity-in-seconds: 8640000
+
+  upload-file:
+    base-uri: file:///D:/PrjITern/upload/
