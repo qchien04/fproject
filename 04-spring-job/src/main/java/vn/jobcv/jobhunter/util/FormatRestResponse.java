@@ -20,7 +20,6 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType, Class converterType) {
         return true;
     }
-
     @Override
     public Object beforeBodyWrite(
             Object body,
@@ -29,18 +28,21 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
             Class selectedConverterType,
             ServerHttpRequest request,
             ServerHttpResponse response) {
+
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
 
-        RestResponse<Object> res = new RestResponse<Object>();
-        res.setStatusCode(status);
+        String path = request.getURI().getPath();
 
-        if (body instanceof String || body instanceof Resource) {
+        // Bỏ qua Prometheus và Swagger
+        if (path.startsWith("/actuator/prometheus") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
             return body;
         }
 
-        String path = request.getURI().getPath();
-        if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+        RestResponse<Object> res = new RestResponse<>();
+        res.setStatusCode(status);
+
+        if (body instanceof String || body instanceof Resource) {
             return body;
         }
 
@@ -54,5 +56,6 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
 
         return res;
     }
+
 
 }
