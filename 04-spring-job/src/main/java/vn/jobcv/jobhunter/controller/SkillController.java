@@ -1,17 +1,11 @@
 package vn.jobcv.jobhunter.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import vn.jobcv.jobhunter.domain.Skill;
@@ -20,6 +14,7 @@ import vn.jobcv.jobhunter.service.SkillService;
 import vn.jobcv.jobhunter.util.annotation.ApiMessage;
 import vn.jobcv.jobhunter.util.error.IdInvalidException;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class SkillController {
@@ -33,50 +28,54 @@ public class SkillController {
     @PostMapping("/skills")
     @ApiMessage("Create a skill")
     public ResponseEntity<Skill> create(@Valid @RequestBody Skill s) throws IdInvalidException {
-        // check name
+        log.info("Creating a new skill: {}", s);
         if (s.getName() != null && this.skillService.isNameExist(s.getName())) {
+            log.warn("Skill name already exists: {}", s.getName());
             throw new IdInvalidException("Skill name = " + s.getName() + " đã tồn tại");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.skillService.createSkill(s));
+        Skill createdSkill = this.skillService.createSkill(s);
+        log.info("Skill created successfully: {}", createdSkill);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSkill);
     }
 
     @PutMapping("/skills")
     @ApiMessage("Update a skill")
     public ResponseEntity<Skill> update(@Valid @RequestBody Skill s) throws IdInvalidException {
-        // check id
+        log.info("Updating skill with ID: {}", s.getId());
         Skill currentSkill = this.skillService.fetchSkillById(s.getId());
         if (currentSkill == null) {
+            log.warn("Skill not found with ID: {}", s.getId());
             throw new IdInvalidException("Skill id = " + s.getId() + " không tồn tại");
         }
-
-        // check name
         if (s.getName() != null && this.skillService.isNameExist(s.getName())) {
+            log.warn("Skill name already exists: {}", s.getName());
             throw new IdInvalidException("Skill name = " + s.getName() + " đã tồn tại");
         }
-
         currentSkill.setName(s.getName());
-        return ResponseEntity.ok().body(this.skillService.updateSkill(currentSkill));
+        Skill updatedSkill = this.skillService.updateSkill(currentSkill);
+        log.info("Skill updated successfully: {}", updatedSkill);
+        return ResponseEntity.ok().body(updatedSkill);
     }
 
     @DeleteMapping("/skills/{id}")
     @ApiMessage("Delete a skill")
     public ResponseEntity<Void> delete(@PathVariable("id") long id) throws IdInvalidException {
-        // check id
+        log.info("Deleting skill with ID: {}", id);
         Skill currentSkill = this.skillService.fetchSkillById(id);
         if (currentSkill == null) {
+            log.warn("Skill not found with ID: {}", id);
             throw new IdInvalidException("Skill id = " + id + " không tồn tại");
         }
         this.skillService.deleteSkill(id);
+        log.info("Skill deleted successfully with ID: {}", id);
         return ResponseEntity.ok().body(null);
     }
 
     @GetMapping("/skills")
     @ApiMessage("fetch all skills")
-    public ResponseEntity<ResultPaginationDTO> getAll(
-            @Filter Specification<Skill> spec,
-            Pageable pageable) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(
-                this.skillService.fetchAllSkills(spec, pageable));
+    public ResponseEntity<ResultPaginationDTO> getAll(@Filter Specification<Skill> spec, Pageable pageable) {
+        log.info("Fetching all skills with pagination and filters");
+        ResultPaginationDTO result = this.skillService.fetchAllSkills(spec, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

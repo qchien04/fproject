@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
 import vn.jobcv.jobhunter.domain.response.file.ResUploadFileDTO;
 import vn.jobcv.jobhunter.service.FileService;
 import vn.jobcv.jobhunter.util.annotation.ApiMessage;
 import vn.jobcv.jobhunter.util.error.StorageException;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class FileController {
@@ -43,27 +45,32 @@ public class FileController {
     public ResponseEntity<ResUploadFileDTO> upload(
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam("folder") String folder
-
     ) throws URISyntaxException, IOException, StorageException {
-        // skip validate
+        log.info("Received file upload request for folder: {}", folder);
+
         if (file == null || file.isEmpty()) {
+            log.warn("File upload failed: File is empty.");
             throw new StorageException("File is empty. Please upload a file.");
         }
+
         String fileName = file.getOriginalFilename();
+        log.info("Uploading file: {}", fileName);
+
         List<String> allowedExtensions = Arrays.asList("pdf", "jpg", "jpeg", "png", "doc", "docx");
         boolean isValid = allowedExtensions.stream().anyMatch(item -> fileName.toLowerCase().endsWith(item));
 
         if (!isValid) {
+            log.warn("File upload failed: Invalid extension - {}", fileName);
             throw new StorageException("Invalid file extension. only allows " + allowedExtensions.toString());
         }
-        // create a directory if not exist
-        this.fileService.createDirectory(baseURI + folder);
 
-        // store file
+        this.fileService.createDirectory(baseURI + folder);
+        log.info("Directory checked/created at: {}/{}", baseURI, folder);
+
         String uploadFile = this.fileService.store(file, folder);
+        log.info("File uploaded successfully: {}", uploadFile);
 
         ResUploadFileDTO res = new ResUploadFileDTO(uploadFile, Instant.now());
-
         return ResponseEntity.ok().body(res);
     }
 
@@ -73,17 +80,21 @@ public class FileController {
             @RequestParam(name = "fileName", required = false) String fileName,
             @RequestParam(name = "folder", required = false) String folder)
             throws StorageException, URISyntaxException, FileNotFoundException {
+
+        log.info("Received file download request: {}/{}", folder, fileName);
+
         if (fileName == null || folder == null) {
+            log.warn("File download failed: Missing required params (fileName or folder)");
             throw new StorageException("Missing required params : (fileName or folder) in query params.");
         }
 
-        // check file exist (and not a directory)
         long fileLength = this.fileService.getFileLength(fileName, folder);
         if (fileLength == 0) {
+            log.warn("File not found: {}/{}", folder, fileName);
             throw new StorageException("File with name = " + fileName + " not found.");
         }
 
-        // download a file
+        log.info("Downloading file: {}/{}", folder, fileName);
         InputStreamResource resource = this.fileService.getResource(fileName, folder);
 
         return ResponseEntity.ok()
