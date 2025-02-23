@@ -15,6 +15,6 @@ public class StaticResourcesWebConfiguration
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/storage/**")
-                .addResourceLocations(baseURI);
+                .addResourceLocations("classpath:/static/storage/");
     }
 }
