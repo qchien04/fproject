@@ -91,56 +91,23 @@ services:
       - default
     volumes:
       - grafana:/var/lib/grafana
-  backend-service:
-    container_name: backend-service
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      DATABASE_HOST: host.docker.internal
-      DATABASE_PORT: 3306
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD: Taolahai1762004@
-      LOGSTASH_HOST: host.docker.internal:5600
-    networks:
-      - default
-
-#  mysql:
-#    image: mysql:8.0
-#    container_name: mysql
-#    restart: always
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/jobhunter
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: Taolahai1762004@
-#    ports:
-#      - "3307:3306"
-#    volumes:
-#      - mysql_data:/var/lib/mysql
-#    networks:
-#      - default
-#  backend:
-#    image: jobhunter-backend
-#    container_name: backend
+#  backend-service:
+#    container_name: backend-service
 #    build:
-#      context: .
+#      context: ./
 #      dockerfile: Dockerfile
-#    depends_on:
-#      - mysql
-#      - kafka
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/jobhunter
-#      SPRING_DATASOURCE_USERNAME: user
-#      SPRING_DATASOURCE_PASSWORD: password
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 #    ports:
 #      - "8080:8080"
+#    environment:
+#      DATABASE_HOST: host.docker.internal
+#      DATABASE_PORT: 3306
+#      DATABASE_USERNAME: root
+#      DATABASE_PASSWORD: Taolahai1762004@
+#    volumes:
+#      - "D:/PrjITern/upload:/app/upload"
+#
 #    networks:
 #      - default
-#volumes:
-#  mysql_data:
 
 
 volumes:

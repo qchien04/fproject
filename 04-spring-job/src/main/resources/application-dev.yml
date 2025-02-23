@@ -6,7 +6,7 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://host.docker.internal:3306/jobhunter
+    url: jdbc:mysql://localhost:3306/jobhunter
     username: root
     password: Taolahai1762004@
     driver-class-name: com.mysql.cj.jdbc.Driver
