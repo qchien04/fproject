@@ -33,3 +33,12 @@ Giao diện quản lý tài khoản:
 
 Giao diện Admin:
 ![alt text](image-6.png)
+
+Giao diện quản lý công ty:
+![alt text](image-7.png)
+
+Giao diện quản lý công việc:
+![alt text](image-8.png)
+
+Giao diện quản lý quyền hạn:
+![alt text](image-9.png)
