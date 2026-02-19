@@ -69,4 +69,5 @@ hoidanit:
     refresh-token-validity-in-seconds: 8640000
 
   upload-file:
-    base-uri: file:///D:/PrjITern/upload/
+    base-uri: file:///E:/D/PrjITern/upload/
+

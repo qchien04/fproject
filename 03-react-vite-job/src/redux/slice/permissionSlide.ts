@@ -12,15 +12,17 @@ interface IState {
     },
     result: IPermission[]
 }
-// First, create the thunk
 export const fetchPermission = createAsyncThunk(
     'permission/fetchPermission',
-    async ({ query }: { query: string }) => {
-        const response = await callFetchPermission(query);
-        return response;
+    async ({ query }: { query: string }, { rejectWithValue }) => {
+        try {
+            const response = await callFetchPermission(query);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data ?? error.message);
+        }
     }
-)
-
+);
 
 const initialState: IState = {
     isFetching: true,
@@ -52,6 +54,9 @@ export const permissionSlide = createSlice({
 
         builder.addCase(fetchPermission.rejected, (state, action) => {
             state.isFetching = false;
+            console.log("Action:", action);
+            console.log(action.payload);
+
             // Add user to the state array
             // state.courseOrder = action.payload;
         })

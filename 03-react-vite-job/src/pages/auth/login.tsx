@@ -15,7 +15,10 @@ const LoginPage = () => {
 
     let location = useLocation();
     let params = new URLSearchParams(location.search);
+
+
     const callback = params?.get("callback");
+
 
     useEffect(() => {
         //đã login => redirect to '/'

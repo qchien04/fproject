@@ -64,6 +64,7 @@ public class EmailService {
             System.out.println("ERROR SEND EMAIL: " + e);
         }
     }
+
     @KafkaListener(topics = "confirm-account-topic", groupId = "confirm-account-group")
     public void sendEmailByKafka(String messageReceive) throws MessagingException, UnsupportedEncodingException {
         log.info("Sending link to user, email={}", messageReceive);
