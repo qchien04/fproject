@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import vn.jobcv.jobhunter.domain.Company;
 import vn.jobcv.jobhunter.domain.Role;
 import vn.jobcv.jobhunter.domain.User;
+import vn.jobcv.jobhunter.domain.request.ReqUpdateProfileDTO;
 import vn.jobcv.jobhunter.domain.response.ResCreateUserDTO;
 import vn.jobcv.jobhunter.domain.response.ResUpdateUserDTO;
 import vn.jobcv.jobhunter.domain.response.ResUserDTO;
@@ -193,5 +194,23 @@ public class UserService {
 
     public User getUserByRefreshTokenAndEmail(String token, String email) {
         return this.userRepository.findByRefreshTokenAndEmail(token, email);
+    }
+
+    public User handleUpdateProfile(String email, ReqUpdateProfileDTO req) {
+        User currentUser = this.handleGetUserByUsername(email);
+        if (currentUser != null) {
+            currentUser.setAddress(req.getAddress());
+            currentUser.setGender(req.getGender());
+            currentUser.setAge(req.getAge());
+            currentUser.setName(req.getName());
+            currentUser = this.userRepository.save(currentUser);
+        }
+        return currentUser;
+    }
+
+    public User handleChangePassword(User user, String encodedPassword) {
+        user.setPassword(encodedPassword);
+        user.setRefreshToken(null);
+        return this.userRepository.save(user);
     }
 }

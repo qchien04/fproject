@@ -1,14 +1,14 @@
-import { Button, Col, Form, Modal, Row, Select, Table, Tabs, message, notification } from "antd";
+import { Button, Col, Form, Input, Modal, Row, Select, Table, Tabs, message, notification, Space } from "antd";
 import { isMobile } from "react-device-detect";
 import type { TabsProps } from 'antd';
-import { IResume, ISubscribers } from "@/types/backend";
+import { IResume, ISubscribers, IUser } from "@/types/backend";
 import { useState, useEffect } from 'react';
-import { callCreateSubscriber, callFetchAllSkill, callFetchResumeByUser, callGetSubscriberSkills, callUpdateSubscriber } from "@/config/api";
+import { callChangePassword, callCreateSubscriber, callFetchAllSkill, callFetchResumeByUser, callGetSubscriberSkills, callUpdateProfile, callUpdateSubscriber, callFetchProfile } from "@/config/api";
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { MonitorOutlined } from "@ant-design/icons";
-import { SKILLS_LIST } from "@/config/utils";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setUserLoginInfo } from "@/redux/slice/accountSlide";
 
 interface IProps {
     open: boolean;
@@ -94,10 +94,192 @@ const UserResume = (props: any) => {
 }
 
 const UserUpdateInfo = (props: any) => {
+    const [form] = Form.useForm();
+    const dispatch = useAppDispatch();
+    const userStore = useAppSelector(state => state.account.user);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        const init = async () => {
+            setLoading(true);
+            const res = await callFetchProfile();
+            if (res && res.data) {
+                const profile = res.data as IUser;
+                form.setFieldsValue({
+                    name: profile.name,
+                    email: profile.email,
+                    age: profile.age,
+                    gender: profile.gender,
+                    address: profile.address,
+                });
+            } else {
+                notification.error({
+                    message: 'Có lỗi xảy ra',
+                    description: res?.message ?? 'Không thể tải thông tin người dùng',
+                });
+            }
+            setLoading(false);
+        }
+        init();
+    }, []);
+
+    const onFinish = async (values: IUser) => {
+        const payload = {
+            name: values.name,
+            age: +values.age,
+            gender: values.gender,
+            address: values.address,
+        };
+        setLoading(true);
+        const res = await callUpdateProfile(payload);
+        setLoading(false);
+        if (res && res.data) {
+            message.success("Cập nhật thông tin thành công");
+            dispatch(setUserLoginInfo({
+                id: userStore.id,
+                email: userStore.email,
+                name: payload.name,
+                role: userStore.role,
+            }));
+        } else {
+            notification.error({
+                message: 'Có lỗi xảy ra',
+                description: res?.message ?? 'Không thể cập nhật thông tin',
+            });
+        }
+    }
+
     return (
-        <div>
-            //todo
-        </div>
+        <Form
+            layout="vertical"
+            form={form}
+            onFinish={onFinish}
+            disabled={loading}
+        >
+            <Row gutter={[20, 0]}>
+                <Col span={24} md={12}>
+                    <Form.Item
+                        label="Họ tên"
+                        name="name"
+                        rules={[{ required: true, message: 'Họ tên không được để trống!' }]}
+                    >
+                        <Input placeholder="Nhập họ tên" />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={12}>
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[{ required: true, message: 'Email không được để trống!' }]}
+                    >
+                        <Input disabled />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={8}>
+                    <Form.Item
+                        label="Tuổi"
+                        name="age"
+                        rules={[{ required: true, message: 'Tuổi không được để trống!' }]}
+                    >
+                        <Input type="number" min={0} />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={8}>
+                    <Form.Item
+                        label="Giới tính"
+                        name="gender"
+                        rules={[{ required: true, message: 'Giới tính không được để trống!' }]}
+                    >
+                        <Select
+                            allowClear
+                            options={[
+                                { label: 'Nam', value: 'MALE' },
+                                { label: 'Nữ', value: 'FEMALE' },
+                                { label: 'Khác', value: 'OTHER' },
+                            ]}
+                        />
+                    </Form.Item>
+                </Col>
+                <Col span={24} md={8}>
+                    <Form.Item
+                        label="Địa chỉ"
+                        name="address"
+                        rules={[{ required: true, message: 'Địa chỉ không được để trống!' }]}
+                    >
+                        <Input placeholder="Nhập địa chỉ" />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Space>
+                <Button type="primary" onClick={() => form.submit()} loading={loading}>Lưu thay đổi</Button>
+                <Button onClick={() => form.resetFields()}>Làm mới</Button>
+            </Space>
+        </Form>
+    )
+}
+
+const ChangePassword = () => {
+    const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
+
+    const onFinish = async (values: { currentPassword: string; newPassword: string; confirmPassword: string; }) => {
+        setLoading(true);
+        const res = await callChangePassword(values.currentPassword, values.newPassword);
+        setLoading(false);
+        if (!res || res?.statusCode === 200 || res?.statusCode === "200") {
+            message.success('Đổi mật khẩu thành công');
+            form.resetFields();
+        } else {
+            notification.error({
+                message: 'Có lỗi xảy ra',
+                description: res?.message ?? 'Không thể đổi mật khẩu'
+            });
+        }
+    }
+
+    return (
+        <Form
+            layout="vertical"
+            form={form}
+            onFinish={onFinish}
+            style={{ maxWidth: 520 }}
+            disabled={loading}
+        >
+            <Form.Item
+                label="Mật khẩu hiện tại"
+                name="currentPassword"
+                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu hiện tại' }]}
+            >
+                <Input.Password placeholder="Nhập mật khẩu hiện tại" />
+            </Form.Item>
+            <Form.Item
+                label="Mật khẩu mới"
+                name="newPassword"
+                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu mới' }]}
+            >
+                <Input.Password placeholder="Nhập mật khẩu mới" />
+            </Form.Item>
+            <Form.Item
+                label="Nhập lại mật khẩu mới"
+                name="confirmPassword"
+                dependencies={["newPassword"]}
+                rules={[
+                    { required: true, message: 'Vui lòng nhập lại mật khẩu mới' },
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            if (!value || getFieldValue('newPassword') === value) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('Mật khẩu nhập lại không khớp'));
+                        },
+                    })
+                ]}
+            >
+                <Input.Password placeholder="Nhập lại mật khẩu mới" />
+            </Form.Item>
+
+            <Button type="primary" onClick={() => form.submit()} loading={loading}>Đổi mật khẩu</Button>
+        </Form>
     )
 }
 
@@ -257,7 +439,7 @@ const ManageAccount = (props: IProps) => {
         {
             key: 'user-password',
             label: `Thay đổi mật khẩu`,
-            children: `//todo`,
+            children: <ChangePassword />,
         },
     ];
 

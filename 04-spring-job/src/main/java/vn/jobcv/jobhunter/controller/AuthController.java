@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import vn.jobcv.jobhunter.domain.User;
+import vn.jobcv.jobhunter.domain.request.ReqChangePasswordDTO;
 import vn.jobcv.jobhunter.domain.request.ReqLoginDTO;
+import vn.jobcv.jobhunter.domain.request.ReqUpdateProfileDTO;
 import vn.jobcv.jobhunter.domain.response.ResCreateUserDTO;
 import vn.jobcv.jobhunter.domain.response.ResLoginDTO;
+import vn.jobcv.jobhunter.domain.response.ResUpdateUserDTO;
+import vn.jobcv.jobhunter.domain.response.ResUserDTO;
 import vn.jobcv.jobhunter.service.UserService;
 import vn.jobcv.jobhunter.util.SecurityUtil;
 import vn.jobcv.jobhunter.util.annotation.ApiMessage;
@@ -195,6 +199,65 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, resCookies.toString())
                 .body(res);
+    }
+
+    @GetMapping("/auth/profile")
+    @ApiMessage("Fetch current user profile")
+    public ResponseEntity<ResUserDTO> getProfile() throws IdInvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().orElse("");
+        if (email.isEmpty()) {
+            throw new IdInvalidException("Access Token không hợp lệ");
+        }
+
+        User currentUserDB = this.userService.handleGetUserByUsername(email);
+        if (currentUserDB == null) {
+            throw new IdInvalidException("User không tồn tại");
+        }
+
+        return ResponseEntity.ok().body(this.userService.convertToResUserDTO(currentUserDB));
+    }
+
+    @PutMapping("/auth/profile")
+    @ApiMessage("Update current user profile")
+    public ResponseEntity<ResUpdateUserDTO> updateProfile(
+            @Valid @RequestBody ReqUpdateProfileDTO reqProfile) throws IdInvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().orElse("");
+        if (email.isEmpty()) {
+            throw new IdInvalidException("Access Token không hợp lệ");
+        }
+
+        User updatedUser = this.userService.handleUpdateProfile(email, reqProfile);
+        if (updatedUser == null) {
+            throw new IdInvalidException("User không tồn tại");
+        }
+        return ResponseEntity.ok().body(this.userService.convertToResUpdateUserDTO(updatedUser));
+    }
+
+    @PutMapping("/auth/change-password")
+    @ApiMessage("Change password")
+    public ResponseEntity<Void> changePassword(
+            @Valid @RequestBody ReqChangePasswordDTO reqChangePassword) throws IdInvalidException {
+        String email = SecurityUtil.getCurrentUserLogin().orElse("");
+        if (email.isEmpty()) {
+            throw new IdInvalidException("Access Token không hợp lệ");
+        }
+
+        User currentUser = this.userService.handleGetUserByUsername(email);
+        if (currentUser == null) {
+            throw new IdInvalidException("User không tồn tại");
+        }
+
+        if (!passwordEncoder.matches(reqChangePassword.getCurrentPassword(), currentUser.getPassword())) {
+            throw new IdInvalidException("Mật khẩu hiện tại không chính xác");
+        }
+
+        if (passwordEncoder.matches(reqChangePassword.getNewPassword(), currentUser.getPassword())) {
+            throw new IdInvalidException("Mật khẩu mới trùng với mật khẩu hiện tại");
+        }
+
+        String encodedPassword = passwordEncoder.encode(reqChangePassword.getNewPassword());
+        this.userService.handleChangePassword(currentUser, encodedPassword);
+        return ResponseEntity.ok().body(null);
     }
 
 

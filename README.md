@@ -14,51 +14,22 @@
 - DevTools
 - Docker, Docker compose
 
-## Build application
-```bash
-mvn clean package -P dev|test|uat|prod
-```
+## Giao diện người dùng
+Giao diện trang chủ:
+![alt text](image.png)
+![alt text](image-1.png)
 
-## Run application
-- Maven statement
-```bash
-./mvnw spring-boot:run
-```
-- Jar statement
-```bash
-java -jar target/backend-service.jar
-```
+Giao diện trang chi tiết công ty:
+![alt text](image-2.png)
 
-- Docker
-```bash
-docker build -t backend-service .
-docker run -d backend-service:latest backend-service
-```
+Giao diện trang chi tiết công việc:
+![alt text](image-3.png)
 
-## Package application
-```bash
-docker build -t backend-service .
-```
+Giao diện ứng tuyển công việc:
+![alt text](image-4.png)
 
-### Môi trường chạy dự án: Node.js v20.14.0
-https://nodejs.org/download/release/v20.14.0/
+Giao diện quản lý tài khoản:
+![alt text](image-5.png)
 
-
-===
-
-Các bước cài đặt: (chế độ development)
-1. clone code
-2. cài đặt thư viện: npm i
-3. Update file .env.development (nếu cần thiết)
-4. Chạy dự án: npm run dev
-
-===
-
-Cách chạy tại chế độ production:
-1. clone code
-2. cài đặt thư viện: npm i
-3. Update file .env.production (nếu cần thiết)
-4. Build dự án: npm run build
-5. Chạy dự án: npm run preview
-
-
+Giao diện Admin:
+![alt text](image-6.png)
